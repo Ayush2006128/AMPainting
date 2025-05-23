@@ -1,0 +1,7 @@
+{
+  "name": "painting-ai",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
