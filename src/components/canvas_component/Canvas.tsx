@@ -1,32 +1,38 @@
 import React, { useRef, useState } from 'react';
 import './Canvas.css';
+import ColorPicker from '../ui/ColorPicker';
+
+const DEFAULT_COLOR = '#222';
 
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [painting, setPainting] = useState(false);
   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
+  const [color, setColor] = useState<string>(DEFAULT_COLOR);
 
-  const getPos = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent> | React.TouchEvent<HTMLCanvasElement>) => {
+  // Helper to get accurate pointer position
+  const getPointerPos = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
-    if ('touches' in e) {
+    if ('touches' in e && e.touches.length > 0) {
       const touch = e.touches[0];
       return {
         x: touch.clientX - rect.left,
         y: touch.clientY - rect.top,
       };
-    } else {
+    } else if ('clientX' in e) {
       return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x: (e as React.MouseEvent).clientX - rect.left,
+        y: (e as React.MouseEvent).clientY - rect.top,
       };
     }
+    return { x: 0, y: 0 };
   };
 
   const startPaint = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent> | React.TouchEvent<HTMLCanvasElement>) => {
     setPainting(true);
-    setLastPos(getPos(e));
+    setLastPos(getPointerPos(e));
   };
 
   const endPaint = () => {
@@ -40,9 +46,11 @@ const Canvas: React.FC = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const pos = getPos(e);
+    // Prevent scrolling on touch
+    if ('touches' in e) e.preventDefault?.();
+    const pos = getPointerPos(e);
     if (lastPos) {
-      ctx.strokeStyle = '#222';
+      ctx.strokeStyle = color;
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.beginPath();
@@ -69,6 +77,7 @@ const Canvas: React.FC = () => {
         onTouchCancel={endPaint}
         onTouchMove={paint}
       />
+      <ColorPicker selectedColor={color} onColorSelect={setColor} />
     </div>
   );
 };
