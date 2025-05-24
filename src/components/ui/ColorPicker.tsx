@@ -47,7 +47,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, selectedColor 
             </div>
             <div className="color-picker-actions">
               <button onClick={handleCancel} className="color-picker-btn-cancel">Cancel</button>
-              <button onClick={handleSubmit} className="color-picker-btn-submit">Submit</button>
+              <button onClick={handleSubmit} className="color-picker-btn-submit">Select</button>
             </div>
           </div>
         </IonContent>

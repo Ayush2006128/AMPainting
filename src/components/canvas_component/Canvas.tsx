@@ -7,7 +7,7 @@ const DEFAULT_COLOR = '#222';
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [painting, setPainting] = useState(false);
-  const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
+  const [lastPos, setLastPos] = useState<{ x: number; y: number; } | null>(null);
   const [color, setColor] = useState<string>(DEFAULT_COLOR);
 
   // Helper to get accurate pointer position
@@ -15,16 +15,21 @@ const Canvas: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    let clientX, clientY;
     if ('touches' in e && e.touches.length > 0) {
       const touch = e.touches[0];
       return {
-        x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top,
+        x: clientX = (touch.clientX - rect.left) * scaleX,
+        y: clientY = (touch.clientY - rect.top) * scaleY,
       };
     } else if ('clientX' in e) {
       return {
-        x: (e as React.MouseEvent).clientX - rect.left,
-        y: (e as React.MouseEvent).clientY - rect.top,
+        x: clientX = ((e as React.MouseEvent).clientX - rect.left) * scaleX,
+        y: clientY = ((e as React.MouseEvent).clientY - rect.top) * scaleY,
       };
     }
     return { x: 0, y: 0 };
