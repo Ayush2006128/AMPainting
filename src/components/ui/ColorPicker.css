@@ -4,6 +4,14 @@
   justify-content: center;
   align-items: center;
   background: var(--ion-background-color, #f8f8f8);
+  border-radius: 22px;
+}
+
+.color-picker-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
 }
 
 .color-picker-grid {
@@ -29,4 +37,50 @@
 .color-swatch.selected {
   border: 3px solid #222;
   box-shadow: 0 0 0 3px #3498db44;
+}
+
+.color-picker-preview-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-picker-preview-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #222;
+  display: inline-block;
+}
+
+.color-picker-preview-code {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.color-picker-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.color-picker-btn-cancel {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #eee;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.color-picker-btn-submit {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
 }

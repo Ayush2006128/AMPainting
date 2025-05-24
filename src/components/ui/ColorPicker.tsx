@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonFab, IonFabButton, IonIcon, IonModal, IonContent } from '@ionic/react';
 import { colorPalette } from 'ionicons/icons';
 import './ColorPicker.css';
-
-const COLORS = [
-  '#222', '#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6', '#e67e22', '#1abc9c', '#fff', '#000'
-];
+import GradientColorPicker from './Gradient';
 
 interface ColorPickerProps {
   onColorSelect: (color: string) => void;
@@ -14,9 +11,19 @@ interface ColorPickerProps {
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, selectedColor }) => {
   const [showModal, setShowModal] = useState(false);
+  const [pickerColor, setPickerColor] = useState(selectedColor);
 
-  const handleColorClick = (color: string) => {
-    onColorSelect(color);
+  useEffect(() => {
+    if (showModal) setPickerColor(selectedColor);
+  }, [showModal, selectedColor]);
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setPickerColor(selectedColor); // Reset preview
+  };
+
+  const handleSubmit = () => {
+    onColorSelect(pickerColor);
     setShowModal(false);
   };
 
@@ -27,18 +34,21 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, selectedColor 
           <IonIcon icon={colorPalette} />
         </IonFabButton>
       </IonFab>
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+      <IonModal isOpen={showModal} onDidDismiss={handleCancel}>
         <IonContent className="color-picker-modal">
-          <div className="color-picker-grid">
-            {COLORS.map((color) => (
-              <button
-                key={color}
-                className={`color-swatch${selectedColor === color ? ' selected' : ''}`}
-                style={{ background: color }}
-                onClick={() => handleColorClick(color)}
-                aria-label={`Select color ${color}`}
+          <div className="color-picker-modal-content">
+            <GradientColorPicker previewColor={pickerColor} setPreviewColor={setPickerColor} />
+            <div className="color-picker-preview-row">
+              <span
+                className="color-picker-preview-swatch"
+                style={{ background: pickerColor }}
               />
-            ))}
+              <span className="color-picker-preview-code">{pickerColor}</span>
+            </div>
+            <div className="color-picker-actions">
+              <button onClick={handleCancel} className="color-picker-btn-cancel">Cancel</button>
+              <button onClick={handleSubmit} className="color-picker-btn-submit">Submit</button>
+            </div>
           </div>
         </IonContent>
       </IonModal>
