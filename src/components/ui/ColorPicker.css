@@ -83,3 +83,17 @@
   font-weight: 500;
   cursor: pointer;
 }
+.color-picker-btn-cancel:hover,
+.color-picker-btn-submit:hover {
+  opacity: 0.9;
+}
+.color-picker-btn-cancel:focus,
+.color-picker-btn-submit:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+.color-picker-btn-cancel:active,
+.color-picker-btn-submit:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

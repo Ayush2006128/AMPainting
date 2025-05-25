@@ -29,11 +29,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, selectedColor 
 
   return (
     <>
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
-        <IonFabButton onClick={() => setShowModal(true)} color="primary">
-          <IonIcon icon={colorPalette} />
-        </IonFabButton>
-      </IonFab>
+      <IonFabButton onClick={() => setShowModal(true)} color="primary">
+        <IonIcon icon={colorPalette} />
+      </IonFabButton>
       <IonModal isOpen={showModal} onDidDismiss={handleCancel}>
         <IonContent className="color-picker-modal">
           <div className="color-picker-modal-content">
