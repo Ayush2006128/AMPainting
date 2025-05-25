@@ -1,14 +1,12 @@
 import React, { useRef, useState } from 'react';
 import './Canvas.css';
-import ColorPicker from '../ui/ColorPicker';
 
 const DEFAULT_COLOR = '#222';
 
-const Canvas: React.FC = () => {
+const Canvas: React.FC<{ color: string }> = ({ color }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [painting, setPainting] = useState(false);
   const [lastPos, setLastPos] = useState<{ x: number; y: number; } | null>(null);
-  const [color, setColor] = useState<string>(DEFAULT_COLOR);
 
   // Helper to get accurate pointer position
   const getPointerPos = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -82,7 +80,6 @@ const Canvas: React.FC = () => {
         onTouchCancel={endPaint}
         onTouchMove={paint}
       />
-      <ColorPicker selectedColor={color} onColorSelect={setColor} />
     </div>
   );
 };
