@@ -1,8 +1,18 @@
+import React, { useState, useRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import Canvas from '../components/canvas_component/Canvas';
+import { menu } from 'ionicons/icons';
+import { IonFab, IonFabButton, IonIcon, IonFabList } from '@ionic/react';
+import Canvas, { CanvasHandle } from '../components/canvas_component/Canvas';
+import ColorPicker from '../components/ui/ColorPicker';
 import './HomePage.css';
+import SaveFab from '../components/ui/SaveFab';
+import ClearFab from '../components/ui/ClearFab';
+
+const DEFAULT_COLOR = '#222';
 
 const HomePage: React.FC = () => {
+  const [color, setColor] = useState<string>(DEFAULT_COLOR);
+  const canvasRef = useRef<CanvasHandle>(null);
   return (
     <IonPage>
       <IonContent fullscreen>
@@ -11,7 +21,28 @@ const HomePage: React.FC = () => {
             <IonTitle size="large">Home Page</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Canvas />
+        <div className="canvas-container">
+          <Canvas color={color} ref={canvasRef} />
+        </div>
+        <div className="controls">
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton color="primary">
+              <IonIcon icon={menu} />
+            </IonFabButton>
+            <IonFabList side="top">
+              <ColorPicker
+                onColorSelect={setColor}
+                selectedColor={color}
+              />
+              <SaveFab onSave={() => {
+                canvasRef.current?.save();
+              }} />
+              <ClearFab onClear={() => {
+                canvasRef.current?.clear();
+              }} />
+            </IonFabList>
+          </IonFab>
+        </div>
       </IonContent>
     </IonPage>
   );

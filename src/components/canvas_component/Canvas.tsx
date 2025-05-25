@@ -1,30 +1,36 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import './Canvas.css';
-import ColorPicker from '../ui/ColorPicker';
 
-const DEFAULT_COLOR = '#222';
+interface CanvasProps { color: string }
 
-const Canvas: React.FC = () => {
+export interface CanvasHandle {
+  save: () => void;
+  clear: () => void;
+}
+
+const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [painting, setPainting] = useState(false);
-  const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
-  const [color, setColor] = useState<string>(DEFAULT_COLOR);
+  const [lastPos, setLastPos] = useState<{ x: number; y: number; } | null>(null);
 
   // Helper to get accurate pointer position
   const getPointerPos = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    let clientX, clientY;
     if ('touches' in e && e.touches.length > 0) {
       const touch = e.touches[0];
       return {
-        x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top,
+        x: (touch.clientX - rect.left) * scaleX,
+        y: (touch.clientY - rect.top) * scaleY,
       };
     } else if ('clientX' in e) {
       return {
-        x: (e as React.MouseEvent).clientX - rect.left,
-        y: (e as React.MouseEvent).clientY - rect.top,
+        x: ((e as React.MouseEvent).clientX - rect.left) * scaleX,
+        y: ((e as React.MouseEvent).clientY - rect.top) * scaleY,
       };
     }
     return { x: 0, y: 0 };
@@ -61,6 +67,27 @@ const Canvas: React.FC = () => {
     setLastPos(pos);
   };
 
+  // Save canvas as image
+  const save = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'drawing.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+
+  // Clear canvas
+  const clear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  useImperativeHandle(ref, () => ({ save, clear }), []);
+
   return (
     <div className="canvas-container">
       <canvas
@@ -77,9 +104,8 @@ const Canvas: React.FC = () => {
         onTouchCancel={endPaint}
         onTouchMove={paint}
       />
-      <ColorPicker selectedColor={color} onColorSelect={setColor} />
     </div>
   );
-};
+});
 
 export default Canvas;

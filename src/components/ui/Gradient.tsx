@@ -50,8 +50,6 @@ const GradientColorPicker: React.FC<GradientColorPickerProps> = ({ previewColor,
   return (
     <canvas
       ref={canvasRef}
-      width={260}
-      height={180}
       className="gradient-canvas"
       onClick={handleCanvasClick}
     />
