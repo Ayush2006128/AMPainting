@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "ayush.muley.painting_ai"
+    namespace "ayush.muley.paintingai"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "ayush.muley.painting_ai"
+        applicationId "ayush.muley.paintingai"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

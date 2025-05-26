@@ -1,4 +1,4 @@
-package ayush.muley.painting_ai;
+package ayush.muley.paintingai;
 
 import com.getcapacitor.BridgeActivity;
 

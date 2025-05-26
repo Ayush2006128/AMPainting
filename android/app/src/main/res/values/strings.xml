@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">painting-ai</string>
-    <string name="title_activity_main">painting-ai</string>
-    <string name="package_name">ayush.muley.painting_ai</string>
-    <string name="custom_url_scheme">ayush.muley.painting_ai</string>
+    <string name="app_name">painting</string>
+    <string name="title_activity_main">painting</string>
+    <string name="package_name">ayush.muley.paintingai</string>
+    <string name="custom_url_scheme">ayush.muley.paintingai</string>
 </resources>

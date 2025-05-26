@@ -1,5 +1,6 @@
 import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import './Canvas.css';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 interface CanvasProps { color: string }
 
@@ -68,13 +69,35 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color }, ref) => {
   };
 
   // Save canvas as image
-  const save = () => {
+  const save = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const link = document.createElement('a');
-    link.download = 'drawing.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    const dataUrl = canvas.toDataURL('image/png');
+    // Extract base64 from data URL
+    const base64 = dataUrl.split(',')[1];
+
+    // Check if running in Capacitor (native) environment
+    const isCapacitor = !!(window as any).Capacitor?.isNativePlatform?.();
+
+    if (isCapacitor) {
+      try {
+        const fileName = `drawing_${Date.now()}.png`;
+        await Filesystem.writeFile({
+          path: fileName,
+          data: base64,
+          directory: Directory.Documents,
+        });
+        alert('Image saved to device files.');
+      } catch (err) {
+        alert('Failed to save image: ' + (err as any).message);
+      }
+    } else {
+      // Browser fallback
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = dataUrl;
+      link.click();
+    }
   };
 
   // Clear canvas
@@ -85,6 +108,7 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color }, ref) => {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
+
 
   useImperativeHandle(ref, () => ({ save, clear }), []);
 
