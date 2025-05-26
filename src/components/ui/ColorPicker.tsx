@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonFab, IonFabButton, IonIcon, IonModal, IonContent } from '@ionic/react';
+import { IonFabButton, IonIcon, IonModal, IonContent } from '@ionic/react';
 import { colorPalette } from 'ionicons/icons';
 import './ColorPicker.css';
 import GradientColorPicker from './Gradient';
@@ -29,7 +29,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, selectedColor 
 
   return (
     <>
-      <IonFabButton onClick={() => setShowModal(true)} color="primary">
+      <IonFabButton onClick={() => setShowModal(true)} color="secondary">
         <IonIcon icon={colorPalette} />
       </IonFabButton>
       <IonModal isOpen={showModal} onDidDismiss={handleCancel}>

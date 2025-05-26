@@ -41,13 +41,6 @@ const HomePage: React.FC = () => {
               }} />
             </IonFabList>
           </IonFab>
-          <IonFab vertical="bottom" horizontal="start" slot="fixed">
-            <IonFabButton color="success" onClick={() => {
-              console.log("run ai");
-            }}>
-              <IonIcon icon={play} />
-            </IonFabButton>
-          </IonFab>
         </div>
       </IonContent>
     </IonPage>

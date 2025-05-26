@@ -8,7 +8,7 @@ interface SaveFabProps {
 }
 
 const SaveFab: React.FC<SaveFabProps> = ({ onSave }) => (
-  <IonFabButton color="primary" onClick={onSave} title="Save Drawing">
+  <IonFabButton color="secondary" onClick={onSave} title="Save Drawing">
     <IonIcon icon={download} />
   </IonFabButton>
 );
