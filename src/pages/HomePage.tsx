@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { menu } from 'ionicons/icons';
-import { IonFab, IonFabButton, IonIcon, IonFabList } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonFabList } from '@ionic/react';
+import { menu, play } from 'ionicons/icons';
 import Canvas, { CanvasHandle } from '../components/canvas_component/Canvas';
 import ColorPicker from '../components/ui/ColorPicker';
 import './HomePage.css';
@@ -41,6 +40,13 @@ const HomePage: React.FC = () => {
                 canvasRef.current?.clear();
               }} />
             </IonFabList>
+          </IonFab>
+          <IonFab vertical="bottom" horizontal="start" slot="fixed">
+            <IonFabButton color="success" onClick={() => {
+              console.log("run ai");
+            }}>
+              <IonIcon icon={play} />
+            </IonFabButton>
           </IonFab>
         </div>
       </IonContent>
