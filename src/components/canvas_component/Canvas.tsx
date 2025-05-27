@@ -2,14 +2,14 @@ import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react'
 import './Canvas.css';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 
-interface CanvasProps { color: string }
+interface CanvasProps { color: string; strokeWidth: number }
 
 export interface CanvasHandle {
   save: () => void;
   clear: () => void;
 }
 
-const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color }, ref) => {
+const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color, strokeWidth }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [painting, setPainting] = useState(false);
   const [lastPos, setLastPos] = useState<{ x: number; y: number; } | null>(null);
@@ -58,7 +58,7 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color }, ref) => {
     const pos = getPointerPos(e);
     if (lastPos) {
       ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
+      ctx.lineWidth = strokeWidth;
       ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.moveTo(lastPos.x, lastPos.y);

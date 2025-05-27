@@ -35,6 +35,10 @@
         </provider>
     </application>
 
+    <!-- Permissions for accessing device's storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
