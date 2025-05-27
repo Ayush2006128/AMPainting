@@ -13,6 +13,13 @@
   padding: 24px;
 }
 
+.color-picker-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  letter-spacing: 0.01em;
+}
+
 .color-picker-grid {
   display: flex;
   flex-wrap: wrap;
@@ -96,4 +103,34 @@
 .color-picker-btn-submit:active {
   transform: scale(0.98);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.color-picker-slider-row {
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.color-picker-slider-label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.color-picker-slider {
+  width: 120px;
+  accent-color: #007bff;
+  margin: 0 8px;
+}
+
+.color-picker-slider-value {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  gap: 4px;
+  min-width: 60px;
 }
