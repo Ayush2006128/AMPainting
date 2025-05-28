@@ -68,10 +68,20 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color, strokeWidth }, re
     setLastPos(pos);
   };
 
-  // Save canvas as image
+  // Save canvas as image (with haptic feedback)
   const save = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Haptic feedback (if available)
+    if ((window as any).navigator?.vibrate) {
+      (window as any).navigator.vibrate(50);
+    } else if ((window as any).Capacitor?.Haptics) {
+      (window as any).Capacitor.Haptics.impact({ style: 'medium' });
+    }
+
     const dataUrl = canvas.toDataURL('image/png');
     // Extract base64 from data URL
     const base64 = dataUrl.split(',')[1];
@@ -87,7 +97,15 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color, strokeWidth }, re
           data: base64,
           directory: Directory.Documents,
         });
-        alert('Image saved to device files.');
+        // Show toast on successful save (Capacitor Toast plugin)
+        if ((window as any).Capacitor?.Plugins?.Toast) {
+          (window as any).Capacitor.Plugins.Toast.show({
+            text: 'Image saved to device files.',
+            duration: 'short',
+          });
+        } else {
+          alert('Image saved to device files.');
+        }
       } catch (err) {
         alert('Failed to save image: ' + (err as any).message);
       }
@@ -97,16 +115,57 @@ const Canvas = forwardRef<CanvasHandle, CanvasProps>(({ color, strokeWidth }, re
       link.download = 'drawing.png';
       link.href = dataUrl;
       link.click();
+      // Show toast for browser
+      if ((window as any).Capacitor?.Plugins?.Toast) {
+        (window as any).Capacitor.Plugins.Toast.show({
+          text: 'Image saved to device files.',
+          duration: 'short',
+        });
+      } else if ((window as any).toast) {
+        (window as any).toast('Image saved to device files.');
+      } else {
+        alert('Image saved to device files.');
+      }
     }
   };
 
-  // Clear canvas
+  // Clear canvas with gradient animation and haptic feedback
   const clear = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Haptic feedback (if available)
+    if ((window as any).navigator?.vibrate) {
+      (window as any).navigator.vibrate(50);
+    } else if ((window as any).Capacitor?.Haptics) {
+      (window as any).Capacitor.Haptics.impact({ style: 'medium' });
+    }
+
+    // Animation parameters
+    const duration = 600; // ms
+    const steps = 30;
+    let currentStep = 0;
+
+    const animate = () => {
+      const progress = currentStep / steps;
+      // Create a vertical gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, `rgba(255,80,80,${progress})`); // More reddish at the top
+      gradient.addColorStop(1, `rgba(255,0,0,${progress})`);   // Strong red at the bottom
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      currentStep++;
+      if (currentStep <= steps) {
+        requestAnimationFrame(animate);
+      } else {
+        // Actually clear the canvas after animation
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+    animate();
   };
 
 
