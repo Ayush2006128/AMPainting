@@ -38,11 +38,13 @@ const GradientColorPicker: React.FC<GradientColorPickerProps> = ({ previewColor,
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const pixel = ctx.getImageData(x, y, 1, 1).data;
+    const pixel = ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
     const color = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`;
     setPreviewColor(color);
   };
