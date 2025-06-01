@@ -34,3 +34,6 @@ yarn-error.log*
 # Secrets
 .env
 .env.*.local
+
+# keystore
+my-release-key.keystore
