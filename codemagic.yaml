@@ -1,16 +1,15 @@
 workflows:
   android-release:
     name: Android Release Build
-    max_build_duration: 520
+    max_build_duration: 60 # Maximum build duration in minutes
     environment:
       vars:
         PACKAGE_NAME: "ayush.muley.paintingai"
       android_signing:
-        - keystore_reference: AMPAINT_KEYSTORE
-          keystore: "${{AMPAINT_KEYSTORE}}"
-          keystore_password: "${{AMPAINT_KEYSTORE_PASSWORD}}"
+        - keystore_reference: AMPAINT_KEYSTORE # This should be the reference name from Codemagic UI
+          keystore_password: "${{AMPAINT_KEYSTORE_PASSWORD}}" # Secret variable from Codemagic UI
           key_alias: "my-key-alias"
-          key_password: "${{AMPAINT_KEY_PASSWORD}}"
+          key_password: "${{AMPAINT_KEY_PASSWORD}}" # Secret variable from Codemagic UI
     scripts:
       - name: Install dependencies
         script: npm install
@@ -18,20 +17,10 @@ workflows:
         script: npm run build
       - name: Copy web assets to Android
         script: npx cap sync android
-      - name: Build Android APK
+      - name: Build Android release outputs
+        working_directory: android # Optional: makes subsequent commands run in the 'android' directory
         script: |
-          cd android
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease bundleRelease # Builds both APK and AAB
     artifacts:
-      - android/app/build/outputs/**/*.apk
-      - android/app/build/outputs/**/*.aab
-
-secrets:
-  AMPAINT_KEYSTORE:
-    file: my-release-key.keystore
-  AMPAINT_KEYSTORE_PASSWORD:
-    required: true
-  AMPAINT_KEY_PASSWORD:
-    required: true
-  AMPAINT_KEYSTORE:
-    required: true
+      - android/app/build/outputs/apk/release/*.apk # More specific path for APKs
+      - android/app/build/outputs/bundle/release/*.aab # More specific path for AABs
