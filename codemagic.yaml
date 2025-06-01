@@ -5,11 +5,12 @@ workflows:
     environment:
       vars:
         PACKAGE_NAME: "ayush.muley.paintingai"
-      android_signing:
-        - keystore_reference: AMPAINT_KEYSTORE # This should be the reference name from Codemagic UI
-          keystore_password: "${{AMPAINT_KEYSTORE_PASSWORD}}" # Secret variable from Codemagic UI
-          key_alias: "my-key-alias"
-          key_password: "${{AMPAINT_KEY_PASSWORD}}" # Secret variable from Codemagic UI
+    # Define your signing configuration here, referencing the keystore from Codemagic UI
+    android_signing:
+      - keystore_reference: AMPAINT_KEYSTORE # This should be the reference name from Codemagic UI
+        keystore_password: "${{AMPAINT_KEYSTORE_PASSWORD}}" # Secret variable from Codemagic UI
+        key_alias: "my-key-alias"
+        key_password: "${{AMPAINT_KEY_PASSWORD}}" # Secret variable from Codemagic UI
     scripts:
       - name: Install dependencies
         script: npm install
@@ -20,7 +21,10 @@ workflows:
       - name: Build Android release outputs
         working_directory: android # Optional: makes subsequent commands run in the 'android' directory
         script: |
-          ./gradlew assembleRelease bundleRelease # Builds both APK and AAB
+          # Apply signing using the Codemagic provided variables
+          # Codemagic will automatically inject the necessary environment variables for signing
+          # when `android_signing` is configured as shown above.
+          ./gradlew assembleRelease bundleRelease
     artifacts:
       - android/app/build/outputs/apk/release/*.apk # More specific path for APKs
       - android/app/build/outputs/bundle/release/*.aab # More specific path for AABs
