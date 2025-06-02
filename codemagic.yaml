@@ -5,9 +5,8 @@ workflows:
     environment:
       vars:
         PACKAGE_NAME: "ayush.muley.paintingai"
-    # Define your signing configuration here, referencing the keystore from Codemagic UI
-    android_signing:
-      - keystore_reference: AMPAINT_KEYSTORE
+      android_signing:
+        - my-key
     scripts:
       - name: Install dependencies
         script: npm install
