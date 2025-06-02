@@ -7,10 +7,7 @@ workflows:
         PACKAGE_NAME: "ayush.muley.paintingai"
     # Define your signing configuration here, referencing the keystore from Codemagic UI
     android_signing:
-      - keystore_reference: AMPAINT_KEYSTORE # This should be the reference name from Codemagic UI
-        keystore_password: "${{AMPAINT_KEYSTORE_PASSWORD}}" # Secret variable from Codemagic UI
-        key_alias: "my-key-alias"
-        key_password: "${{AMPAINT_KEY_PASSWORD}}" # Secret variable from Codemagic UI
+      - keystore_reference: AMPAINT_KEYSTORE
     scripts:
       - name: Install dependencies
         script: npm install
